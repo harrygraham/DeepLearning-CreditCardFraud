@@ -66,28 +66,29 @@ from collections import Counter
 from imblearn.over_sampling import SMOTE
 sm = SMOTE(random_state=1)
 X_res, y_res = sm.fit_sample(X_train, y_train)
-print('dataset shape {}'.format(Counter(data['Class'])))
-print('Resampled dataset shape {}'.format(Counter(y_res)))
+print('Original dataset shape {}'.format(Counter(data['Class'])))
+print('Training dataset shape {}'.format(Counter(y_train['Class'])))
+print('Resampled training dataset shape {}'.format(Counter(y_res)))
 
-# CROSS VALIDATION
-scores = cross_val_score(lr, X_res, y_res, scoring='recall', cv=5)
-print scores
-print 'Recall mean = ', np.mean(scores)
+# # CROSS VALIDATION
+# scores = cross_val_score(lr, X_res, y_res, scoring='recall', cv=5)
+# print scores
+# print 'Recall mean = ', np.mean(scores)
 
-lr.fit(X_res, y_res)
-y_pred = lr.predict(X_test)
-cm = confusion_matrix(y_test, y_pred)
-class_names = [0,1]
+# lr.fit(X_res, y_res)
+# y_pred = lr.predict(X_test)
+# cm = confusion_matrix(y_test, y_pred)
+# class_names = [0,1]
 
 
-plt.figure()
-plot_confusion_matrix(cm, classes=class_names, title='Confusion matrix')
-plt.show()
+# plt.figure()
+# plot_confusion_matrix(cm, classes=class_names, title='Confusion matrix')
+# plt.show()
 
-from sklearn.metrics import classification_report
-print classification_report(y_test, y_pred)
+# from sklearn.metrics import classification_report
+# print classification_report(y_test, y_pred)
 
-################### K NEAREST NEIGHBORS ###################
+# ################## K NEAREST NEIGHBORS ###################
 # print 'K NEAREST NEIGHBORS: '
 # from sklearn.neighbors import KNeighborsClassifier
 # neigh = KNeighborsClassifier()
@@ -108,42 +109,116 @@ print classification_report(y_test, y_pred)
 # plt.show()
 
 # from sklearn.metrics import classification_report
-#print classification_report(y_test, y_pred)
+# print classification_report(y_test, y_pred)
 
-################### DECISION TREE ###################
-print 'DECISION TREE: '
-from sklearn.tree import DecisionTreeClassifier
-dt = DecisionTreeClassifier()
+# ################### DECISION TREE ###################
+# print 'DECISION TREE: '
+# from sklearn.tree import DecisionTreeClassifier
+# dt = DecisionTreeClassifier()
 
-# scores = cross_val_score(dt, X_res, y_res, scoring='recall', cv=5)
-# print scores
-# print 'Recall mean = ', np.mean(scores)
+# # scores = cross_val_score(dt, X_res, y_res, scoring='recall', cv=5)
+# # print scores
+# # print 'Recall mean = ', np.mean(scores)
 
-dt.fit(X_res, y_res)
-y_pred = dt.predict(X_test)
-cm = confusion_matrix(y_test, y_pred)
-class_names = [0,1]
+# dt.fit(X_res, y_res)
+# y_pred = dt.predict(X_test)
+# cm = confusion_matrix(y_test, y_pred)
+# class_names = [0,1]
 
 
-# plt.figure()
-# plot_confusion_matrix(cm, classes=class_names, title='Confusion matrix')
-# plt.show()
+# # plt.figure()
+# # plot_confusion_matrix(cm, classes=class_names, title='Confusion matrix')
+# # plt.show()
 
-from sklearn.metrics import classification_report
-print classification_report(y_test, y_pred)
-print recall_score(y_test, y_pred)
+# from sklearn.metrics import classification_report
+# print classification_report(y_test, y_pred)
+# print recall_score(y_test, y_pred)
 
 ################### NEURAL NET ###################
-print 'NEURAL NET: '
-from sklearn.neural_network import MLPClassifier
-mlp = MLPClassifier()
+# print 'NEURAL NET: '
+# from sklearn.neural_network import MLPClassifier
+# mlp = MLPClassifier(hidden_layer_sizes=(200,100))
+
+# # scores = cross_val_score(mlp, X_res, y_res, scoring='recall', cv=5)
+# # print scores
+# # print 'Recall mean = ', np.mean(scores)
+
+# mlp.fit(X_res, y_res)
+# y_pred = mlp.predict(X_test)
+# cm = confusion_matrix(y_test, y_pred)
+# class_names = [0,1]
+
+
+# # plt.figure()
+# # plot_confusion_matrix(cm, classes=class_names, title='Confusion matrix')
+# # plt.show()
+
+# from sklearn.metrics import classification_report
+# print classification_report(y_test, y_pred)
+# print recall_score(y_test, y_pred)
+
+
+# ################### GAUSSIAN PROCESS ###################
+# print 'GAUSSIAN PROCESS: '
+# from sklearn.gaussian_process import GaussianProcessClassifier
+# from sklearn.gaussian_process.kernels import RBF
+# gp = GaussianProcessClassifier(kernel=1.0 * RBF(length_scale=1.0),
+#                                    optimizer=None)
+
+# # scores = cross_val_score(mlp, X_res, y_res, scoring='recall', cv=5)
+# # print scores
+# # print 'Recall mean = ', np.mean(scores)
+
+# gp.fit(X_res, y_res)
+# y_pred = gp.predict(X_test)
+# cm = confusion_matrix(y_test, y_pred)
+# class_names = [0,1]
+
+
+# # plt.figure()
+# # plot_confusion_matrix(cm, classes=class_names, title='Confusion matrix')
+# # plt.show()
+
+# from sklearn.metrics import classification_report
+# print classification_report(y_test, y_pred)
+# print recall_score(y_test, y_pred)
+
+# ################### LINEAR SVM ###################
+# print 'LINEAR SVM: '
+# from sklearn.svm import SVC
+
+# lin_svm = SVC()
+
+# # scores = cross_val_score(mlp, X_res, y_res, scoring='recall', cv=5)
+# # print scores
+# # print 'Recall mean = ', np.mean(scores)
+
+# lin_svm.fit(X_res, y_res)
+# y_pred = lin_svm.predict(X_test)
+# cm = confusion_matrix(y_test, y_pred)
+# class_names = [0,1]
+
+
+# # plt.figure()
+# # plot_confusion_matrix(cm, classes=class_names, title='Confusion matrix')
+# # plt.show()
+
+# from sklearn.metrics import classification_report
+# print classification_report(y_test, y_pred)
+# print recall_score(y_test, y_pred)
+
+################### RANDOM FOREST ###################
+print 'RANDOM FOREST: '
+from sklearn.ensemble import RandomForestClassifier
+
+rf = RandomForestClassifier()
 
 # scores = cross_val_score(mlp, X_res, y_res, scoring='recall', cv=5)
 # print scores
 # print 'Recall mean = ', np.mean(scores)
 
-mlp.fit(X_res, y_res)
-y_pred = mlp.predict(X_test)
+rf.fit(X_res, y_res)
+y_pred = rf.predict(X_test)
 cm = confusion_matrix(y_test, y_pred)
 class_names = [0,1]
 
@@ -155,3 +230,4 @@ class_names = [0,1]
 from sklearn.metrics import classification_report
 print classification_report(y_test, y_pred)
 print recall_score(y_test, y_pred)
+

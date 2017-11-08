@@ -63,8 +63,9 @@ from collections import Counter
 from imblearn.over_sampling import RandomOverSampler 
 ros = RandomOverSampler(random_state=1)
 X_res, y_res = ros.fit_sample(X_train, y_train)
-print('dataset shape {}'.format(Counter(data['Class'])))
-print('Resampled dataset shape {}'.format(Counter(y_res)))
+print('Original dataset shape {}'.format(Counter(data['Class'])))
+print('Training dataset shape {}'.format(Counter(y_train['Class'])))
+print('Resampled training dataset shape {}'.format(Counter(y_res)))
 
 # CROSS VALIDATION
 scores = cross_val_score(lr, X_res, y_res, scoring='recall', cv=5)
