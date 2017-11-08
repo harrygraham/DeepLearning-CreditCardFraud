@@ -38,14 +38,6 @@ def plot_confusion_matrix(cm, classes,
 
 data = pd.read_csv("creditcard.csv")
 
-# Examine data
-# print data.head()
-
-# Print a plot of class balance
-# classes = pd.value_counts(data['Class'], sort=True)
-# classes.plot(kind = 'bar')
-# plt.show()
-
 # Normalise and reshape the Amount column, so it's values lie between -1 and 1
 from sklearn.preprocessing import StandardScaler
 data['norm_Amount'] = StandardScaler().fit_transform(data['Amount'].reshape(-1,1))
@@ -77,15 +69,11 @@ lr = LogisticRegression(C = 10)
 X = data.ix[:, data.columns != 'Class']
 y = data.ix[:, data.columns == 'Class']
 
-
-
-
-
 # Whole dataset, training-test data splitting
 X_train, X_test, y_train, y_test = train_test_split(X,y,test_size = 0.3, random_state = 0)
 
 # CROSS VALIDATION
-scores = cross_val_score(lr, X, y, scoring='recall', cv=5)
+scores = cross_val_score(lr, X_train, y_train, scoring='recall', cv=5)
 print scores
 print 'Recall mean = ', np.mean(scores)
 

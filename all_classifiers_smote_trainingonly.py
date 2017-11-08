@@ -38,14 +38,6 @@ def plot_confusion_matrix(cm, classes,
 
 data = pd.read_csv("creditcard.csv")
 
-# Examine data
-# print data.head()
-
-# Print a plot of class balance
-# classes = pd.value_counts(data['Class'], sort=True)
-# classes.plot(kind = 'bar')
-# plt.show()
-
 # Normalise and reshape the Amount column, so it's values lie between -1 and 1
 from sklearn.preprocessing import StandardScaler
 data['norm_Amount'] = StandardScaler().fit_transform(data['Amount'].reshape(-1,1))
@@ -57,6 +49,8 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split, KFold, cross_val_score
 from sklearn.metrics import confusion_matrix,precision_recall_curve,auc,roc_auc_score,roc_curve,recall_score,classification_report 
 
+################### LOGISTIC REGRESSION ###################
+print 'LOGISTIC REGRESSION: '
 # Call the logistic regression model with a certain C parameter
 lr = LogisticRegression(C = 10)
 
@@ -64,15 +58,23 @@ lr = LogisticRegression(C = 10)
 X = data.ix[:, data.columns != 'Class']
 y = data.ix[:, data.columns == 'Class']
 
+
 # Whole dataset, training-test data splitting
 X_train, X_test, y_train, y_test = train_test_split(X,y,test_size = 0.3, random_state = 0)
 
+from collections import Counter
+from imblearn.over_sampling import SMOTE
+sm = SMOTE(random_state=1)
+X_res, y_res = sm.fit_sample(X_train, y_train)
+print('dataset shape {}'.format(Counter(data['Class'])))
+print('Resampled dataset shape {}'.format(Counter(y_res)))
+
 # CROSS VALIDATION
-scores = cross_val_score(lr, X_train, y_train, scoring='recall', cv=5)
+scores = cross_val_score(lr, X_res, y_res, scoring='recall', cv=5)
 print scores
 print 'Recall mean = ', np.mean(scores)
 
-lr.fit(X_train, y_train)
+lr.fit(X_res, y_res)
 y_pred = lr.predict(X_test)
 cm = confusion_matrix(y_test, y_pred)
 class_names = [0,1]
@@ -85,6 +87,71 @@ plt.show()
 from sklearn.metrics import classification_report
 print classification_report(y_test, y_pred)
 
+################### K NEAREST NEIGHBORS ###################
+# print 'K NEAREST NEIGHBORS: '
+# from sklearn.neighbors import KNeighborsClassifier
+# neigh = KNeighborsClassifier()
+
+# # CROSS VALIDATION
+# scores = cross_val_score(neigh, X_res, y_res, scoring='recall', cv=5)
+# print scores
+# print 'Recall mean = ', np.mean(scores)
+
+# neigh.fit(X_res, y_res)
+# y_pred = neigh.predict(X_test)
+# cm = confusion_matrix(y_test, y_pred)
+# class_names = [0,1]
 
 
+# plt.figure()
+# plot_confusion_matrix(cm, classes=class_names, title='Confusion matrix')
+# plt.show()
 
+# from sklearn.metrics import classification_report
+#print classification_report(y_test, y_pred)
+
+################### DECISION TREE ###################
+print 'DECISION TREE: '
+from sklearn.tree import DecisionTreeClassifier
+dt = DecisionTreeClassifier()
+
+# scores = cross_val_score(dt, X_res, y_res, scoring='recall', cv=5)
+# print scores
+# print 'Recall mean = ', np.mean(scores)
+
+dt.fit(X_res, y_res)
+y_pred = dt.predict(X_test)
+cm = confusion_matrix(y_test, y_pred)
+class_names = [0,1]
+
+
+# plt.figure()
+# plot_confusion_matrix(cm, classes=class_names, title='Confusion matrix')
+# plt.show()
+
+from sklearn.metrics import classification_report
+print classification_report(y_test, y_pred)
+print recall_score(y_test, y_pred)
+
+################### NEURAL NET ###################
+print 'NEURAL NET: '
+from sklearn.neural_network import MLPClassifier
+mlp = MLPClassifier()
+
+# scores = cross_val_score(mlp, X_res, y_res, scoring='recall', cv=5)
+# print scores
+# print 'Recall mean = ', np.mean(scores)
+
+mlp.fit(X_res, y_res)
+y_pred = mlp.predict(X_test)
+cm = confusion_matrix(y_test, y_pred)
+class_names = [0,1]
+
+
+# plt.figure()
+# plot_confusion_matrix(cm, classes=class_names, title='Confusion matrix')
+# plt.show()
+
+from sklearn.metrics import classification_report
+print classification_report(y_test, y_pred)
+print recall_score(y_test, y_pred)

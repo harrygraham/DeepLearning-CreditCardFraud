@@ -38,14 +38,6 @@ def plot_confusion_matrix(cm, classes,
 
 data = pd.read_csv("creditcard.csv")
 
-# Examine data
-# print data.head()
-
-# Print a plot of class balance
-# classes = pd.value_counts(data['Class'], sort=True)
-# classes.plot(kind = 'bar')
-# plt.show()
-
 # Normalise and reshape the Amount column, so it's values lie between -1 and 1
 from sklearn.preprocessing import StandardScaler
 data['norm_Amount'] = StandardScaler().fit_transform(data['Amount'].reshape(-1,1))
@@ -56,6 +48,19 @@ data = data.drop(['Time', 'Amount'], axis=1)
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split, KFold, cross_val_score
 from sklearn.metrics import confusion_matrix,precision_recall_curve,auc,roc_auc_score,roc_curve,recall_score,classification_report 
+
+fraud_indices = np.array(data[data.Class == 1].index)
+print 'Number of frauds', len(fraud_indices)
+
+# data.sample(frac=1)
+non_fraud = data[data.Class==0]
+fraud = data[data.Class==1]
+
+print 'number of non fraud: ', len(non_fraud)
+non_fraud = non_fraud.loc[np.random.choice(non_fraud.index, len(fraud_indices), replace=False)]
+
+data = pd.concat([non_fraud, fraud])
+print 'non_fraud after: ', len(non_fraud)
 
 # Call the logistic regression model with a certain C parameter
 lr = LogisticRegression(C = 10)
@@ -85,6 +90,26 @@ plt.show()
 from sklearn.metrics import classification_report
 print classification_report(y_test, y_pred)
 
+################### K NEAREST NEIGHBORS ###################
+print 'K NEAREST NEIGHBORS: '
+from sklearn.neighbors import KNeighborsClassifier
+neigh = KNeighborsClassifier()
+
+# # CROSS VALIDATION
+# scores = cross_val_score(neigh, X_res, y_res, scoring='recall', cv=5)
+# print scores
+# print 'Recall mean = ', np.mean(scores)
+
+neigh.fit(X_train, y_train)
+y_pred = neigh.predict(X_test)
+cm = confusion_matrix(y_test, y_pred)
+class_names = [0,1]
 
 
+plt.figure()
+plot_confusion_matrix(cm, classes=class_names, title='Confusion matrix')
+plt.show()
+
+from sklearn.metrics import classification_report
+print classification_report(y_test, y_pred)
 
