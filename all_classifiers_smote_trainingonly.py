@@ -223,6 +223,15 @@ cm = confusion_matrix(y_test, y_pred)
 class_names = [0,1]
 
 
+model = RandomForestRegressor(random_state=30)
+param_grid = { "n_estimators"      : [250, 500, 750],
+           "criterion"         : ["gini", "entropy"],
+           "max_features"      : [3, 5],
+           "max_depth"         : [10, 20]}
+grid_search = GridSearchCV(clf, param_grid, n_jobs=-1, cv=3)
+grid_search.fit(X, y)
+print grid_search.best_params_
+
 # plt.figure()
 # plot_confusion_matrix(cm, classes=class_names, title='Confusion matrix')
 # plt.show()
