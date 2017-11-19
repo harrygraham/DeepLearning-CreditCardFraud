@@ -57,7 +57,7 @@ classifiers = [
     GaussianNB()]
 
 # Setting up dataframe table properties
-log_cols=["Classifier", "F1 Score", "Precision", "Recall"]
+log_cols=["Classifier", "F1 Score", "Precision", "Recall", "Training Time"]
 log = pd.DataFrame(columns=log_cols)
 print("="*30)
 
