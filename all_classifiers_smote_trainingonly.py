@@ -208,35 +208,82 @@ print('Resampled training dataset shape {}'.format(Counter(y_res)))
 # print recall_score(y_test, y_pred)
 
 ################### RANDOM FOREST ###################
-print 'RANDOM FOREST: '
-from sklearn.ensemble import RandomForestClassifier
+# print 'RANDOM FOREST: '
+# from sklearn.ensemble import RandomForestClassifier
 
-rf = RandomForestClassifier()
+# rf = RandomForestClassifier()
 
-# scores = cross_val_score(mlp, X_res, y_res, scoring='recall', cv=5)
+# # scores = cross_val_score(mlp, X_res, y_res, scoring='recall', cv=5)
+# # print scores
+# # print 'Recall mean = ', np.mean(scores)
+
+# rf.fit(X_res, y_res)
+# y_pred = rf.predict(X_test)
+# cm = confusion_matrix(y_test, y_pred)
+# class_names = [0,1]
+
+
+# model = RandomForestRegressor(random_state=30)
+# param_grid = { "n_estimators"      : [250, 500, 750],
+#            "criterion"         : ["gini", "entropy"],
+#            "max_features"      : [3, 5],
+#            "max_depth"         : [10, 20]}
+# grid_search = GridSearchCV(clf, param_grid, n_jobs=-1, cv=3)
+# grid_search.fit(X, y)
+# print grid_search.best_params_
+
+# # plt.figure()
+# # plot_confusion_matrix(cm, classes=class_names, title='Confusion matrix')
+# # plt.show()
+
+# from sklearn.metrics import classification_report
+# print classification_report(y_test, y_pred)
+# print recall_score(y_test, y_pred)
+
+################### NAIVE BAYES ###################
+# print 'Gaussian Naive Bayes: '
+
+# from sklearn.naive_bayes import GaussianNB
+# gnb = GaussianNB()
+
+# scores = cross_val_score(gnb, X_res, y_res, scoring='recall', cv=5)
 # print scores
 # print 'Recall mean = ', np.mean(scores)
 
-rf.fit(X_res, y_res)
-y_pred = rf.predict(X_test)
-cm = confusion_matrix(y_test, y_pred)
-class_names = [0,1]
-
-
-model = RandomForestRegressor(random_state=30)
-param_grid = { "n_estimators"      : [250, 500, 750],
-           "criterion"         : ["gini", "entropy"],
-           "max_features"      : [3, 5],
-           "max_depth"         : [10, 20]}
-grid_search = GridSearchCV(clf, param_grid, n_jobs=-1, cv=3)
-grid_search.fit(X, y)
-print grid_search.best_params_
+# gnb.fit(X_res, y_res)
+# y_pred = gnb.predict(X_test)
+# cm = confusion_matrix(y_test, y_pred)
+# class_names = [0,1]
 
 # plt.figure()
 # plot_confusion_matrix(cm, classes=class_names, title='Confusion matrix')
 # plt.show()
 
+# from sklearn.metrics import classification_report
+# print classification_report(y_test, y_pred)
+# print recall_score(y_test, y_pred)
+
+################### GAUSSIAN PROCESS ###################
+print 'Gaussian Process: '
+
+from sklearn.gaussian_process import GaussianProcessClassifier
+gpc = GaussianProcessClassifier()
+
+scores = cross_val_score(gpc, X_res, y_res, scoring='recall', cv=5)
+print scores
+print 'Recall mean = ', np.mean(scores)
+
+gpc.fit(X_res, y_res)
+y_pred = gpc.predict(X_test)
+cm = confusion_matrix(y_test, y_pred)
+class_names = [0,1]
+
+plt.figure()
+plot_confusion_matrix(cm, classes=class_names, title='Confusion matrix')
+plt.show()
+
 from sklearn.metrics import classification_report
 print classification_report(y_test, y_pred)
 print recall_score(y_test, y_pred)
+
 

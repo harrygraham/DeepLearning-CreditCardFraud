@@ -27,7 +27,7 @@ X = data.ix[:, data.columns != 'Class']
 y = data.ix[:, data.columns == 'Class']
 
 # Whole dataset, training-test data splitting
-X_train, X_test, y_train, y_test = train_test_split(X,y,test_size = 0.3, random_state = 0)
+X_train, X_test, y_train, y_test = train_test_split(X,y,test_size = 0.8, random_state = 0)
 
 from collections import Counter
 from imblearn.over_sampling import SMOTE
@@ -60,25 +60,25 @@ print('Resampled training dataset shape {}'.format(Counter(y_res)))
 print 'Random Forest: '
 from sklearn.ensemble import RandomForestClassifier
 
-rf = RandomForestClassifier(n_estimators=250, criterion="gini", max_features=3, max_depth=10)
+# rf = RandomForestClassifier(n_estimators=250, criterion="gini", max_features=3, max_depth=10)
 
-# rf = RandomForestClassifier()
-# param_grid = { "n_estimators"      : [250, 500, 750],
-#            	   "criterion"         : ["gini", "entropy"],
-#                "max_features"      : [3, 5]}
-# #,
+rf = RandomForestClassifier()
+param_grid = { "n_estimators"      : [250, 500, 750],
+           "criterion"         : ["gini", "entropy"],
+           "max_features"      : [3, 5]}
+#,
 #            "max_depth"         : [10, 20]
-from sklearn.metrics import recall_score, make_scorer
-#scorer = make_scorer(recall_score, pos_label=1)
-#print 'scorer: ', scorer
+from sklearn.metrics import recall_score, make_scorer, f1_score
+scorer = make_scorer(f1_score, pos_label=1)
 
-# grid_search = GridSearchCV(rf, param_grid, n_jobs=1, scoring='f1', verbose=50)
-# grid_search.fit(X_res, y_res)
-# print grid_search.best_params_, grid_search.best_estimator_
 
-rf.fit(X_res, y_res)
-y_pred = rf.predict(X_test)
-# y_pred = grid_search.predict(X_test)
+grid_search = GridSearchCV(rf, param_grid, n_jobs=1, cv=3, scoring=scorer, verbose=50)
+grid_search.fit(X_res, y_res)
+print grid_search.best_params_, grid_search.best_estimator_
+
+# rf.fit(X_res, y_res)
+# y_pred = rf.predict(X_test)
+y_pred = grid_search.predict(X_test)
 from sklearn.metrics import classification_report
 print classification_report(y_test, y_pred)
 print 'Test recall score: ', recall_score(y_test, y_pred)
@@ -93,6 +93,7 @@ pickle.dump(tuple_objects, open("tuple_model.pkl", 'wb'))
 
 
 print 'Model saved.'
+
 
 
 
